@@ -1,0 +1,4 @@
+{"message":{"date":"2019-01-20T18:36:49.873Z","url":"localhost:3000/news"},"level":"info"}
+{"message":{"date":"2019-01-20T18:36:50.158Z","url":"localhost:3000/favicon.ico"},"level":"info"}
+{"message":{"date":"2019-01-20T18:36:55.110Z","url":"localhost:3000/news/123"},"level":"info"}
+{"message":{"date":"2019-01-20T18:36:57.652Z","url":"localhost:3000/"},"level":"info"}
