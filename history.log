@@ -33,3 +33,6 @@
 {"message":{"date":"2019-02-03T19:39:53.409Z","url":"localhost:3000/news/5?author=Any%20author&title=Any%20Titile&text=Any%20Text"},"level":"info"}
 {"message":{"date":"2019-02-03T19:40:11.825Z","url":"localhost:3000/news/author=Any%20author&title=Any%20Titile&text=Any%20Text"},"level":"info"}
 {"message":{"date":"2019-02-03T19:40:19.721Z","url":"localhost:3000/news/?author=Any%20author&title=Any%20Titile&text=Any%20Text"},"level":"info"}
+{"message":{"date":"2019-02-03T19:54:40.611Z","url":"localhost:3000/news/1"},"level":"info"}
+{"message":{"date":"2019-02-03T19:55:52.816Z","url":"localhost:3000/news/1"},"level":"info"}
+{"message":{"date":"2019-02-03T19:59:07.262Z","url":"localhost:3000/news/4781"},"level":"info"}

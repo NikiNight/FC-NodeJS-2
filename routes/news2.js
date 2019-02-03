@@ -33,14 +33,16 @@ router.post(['/news'], function(req, res, next) {
       .catch(err => res.send(500));
 });
 
-router.delete(['/news/:id', '/news'], function(req, res, next) {
-  res.send(`Delete News ${req.params.id ? req.params.id : ""}`);
-  console.log(`DELETE request ${req.params.id ? req.params.id : ""}`);
+router.delete(['/news/:id'], function(req, res, next) {
+  News.findOneAndRemove({id: req.params.id})
+      .then(results => { res.send(`News ${results} was deleted`) })
+      .catch(err => res.send(500));
 });
 
-router.put(['/news/:id', '/news'], function(req, res, next) {
-  res.send(`Put News ${req.params.id ? req.params.id : ""}`);
-  console.log(`PUT request ${req.params.id ? req.params.id : ""}`);
+router.put(['/news/:id'], function(req, res, next) {
+  News.findOneAndUpdate({id: req.params.id}, {date: new Date()})
+      .then(results => { res.send(`News ${results} was updated`) })
+      .catch(err => res.send(500));
 });
 
 module.exports = router;
