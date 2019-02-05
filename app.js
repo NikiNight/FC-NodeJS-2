@@ -1,14 +1,52 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var winston = require('winston');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const winston = require('winston');
+//const session = require("express-session");
 
-var newsRouter = require('./routes/news');
-var newsRouter2 = require('./routes/news2');
+const bodyParser = require('body-parser');
+const session = require('cookie-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-var app = express();
+const newsRouter = require('./routes/news');
+const User = require('./server/schema').User;
+
+const app = express();
+
+passport.use(new LocalStrategy({
+    usernameField: 'login',
+    passwordField: 'password'
+  },
+  function (username, password, done) {
+      User.findOne({ login: username }, function (err, user, next) {
+          if (err) {
+              next(err);
+              return done(err);
+          }
+          if (!user) {
+              return done(null, false, { message: 'Login is incorrect' });
+          }
+          if (!user.verifyPassword(password, user.password)) {
+              return done(null, false, { message: 'Passord is incorrect' });
+          }
+          return done(null, user);
+      });
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  User.findOne({ login: user.login }, function (err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+  });
+});
 
 //Logging setup
 winston.configure({
@@ -17,24 +55,25 @@ winston.configure({
   ]
 });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(function(req, res, next){
   winston.info({date: new Date(), url: req.get('host') + req.originalUrl});
   next();
 });
 
-//Task 1
-//app.use('/', newsRouter);
-//Task 2
-app.use('/', newsRouter2);
+//Start session
+app.use(session({ secret: 'SECRET' }))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'pug');
+app.set("views", path.join(__dirname, "./views"));
+
+app.use('/', newsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
